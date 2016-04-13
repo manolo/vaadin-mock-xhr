@@ -31,8 +31,15 @@
   }
 
   window.addEventListener('WebComponentsReady', function() {
-    // Monkey-patch vaadin-upload prototype to use MockHttpRequest
-    Object.getPrototypeOf(document.createElement('vaadin-upload'))._createXhr = mockXhrGenerator;
+    var e = document.createElement('vaadin-upload');
+    // Wait until the component is ready. Usefull for async loading.
+    var i = setInterval(function() {
+      if (e.constructor !== HTMLElement && e.constructor != HTMLUnknownElement) {
+        // Monkey-patch vaadin-upload prototype to use MockHttpRequest
+        Object.getPrototypeOf(e)._createXhr = mockXhrGenerator;
+        clearInterval(i);
+      }
+    }, 100);
   });
   </script>
 </body>
